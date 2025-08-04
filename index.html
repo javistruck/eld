@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplicación de Evaluaciones</title>
+    <script type="module">
+        import { Share } from '@capacitor/share';
+        window.Share = Share; // Hacemos el plugin accesible globalmente
+    </script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f4f4f4; color: #333; }
+        .container { max-width: 600px; margin: auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        h1 { text-align: center; color: #007BFF; }
+        .section { margin-bottom: 20px; }
+        .input-group { margin-bottom: 15px; }
+        .input-group label { display: block; margin-bottom: 5px; font-weight: bold; }
+        .input-group input, .input-group select { width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
+        button { background-color: #007BFF; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; }
+        button:hover { background-color: #0056b3; }
+        #exam-list { list-style: none; padding: 0; }
+        #exam-list li { background: #eee; margin-bottom: 10px; padding: 10px; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; }
+        #exam-list li button { background: #f44336; padding: 5px 10px; }
+        #exam-frame-container { display: none; margin-top: 20px; border: 1px solid #ccc; border-radius: 8px; height: 80vh; }
+        #exam-iframe { width: 100%; height: 100%; border: none; }
+        #results-section { display: none; margin-top: 20px; text-align: center; }
+        #share-btn { background-color: #28a745; margin-top: 10px; }
+        #back-to-menu-btn { display: none; margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Aplicación de Evaluaciones</h1>
+
+    <div class="section" id="launcher-menu">
+        <h2>Añadir Nuevo Examen</h2>
+        <div class="input-group">
+            <label for="exam-url-input">URL del Examen HTML:</label>
+            <input type="url" id="exam-url-input" placeholder="Ej: https://usuario.github.io/examen.html">
+        </div>
+        <div class="input-group">
+            <label for="exam-name-input">Nombre del Examen:</label>
+            <input type="text" id="exam-name-input" placeholder="Ej: Evaluación de Transmisión">
+        </div>
+        <button onclick="addExamUrl()">Añadir Examen</button>
+        
+        <h2>Exámenes Disponibles</h2>
+        <ul id="exam-list">
+            </ul>
+        <button onclick="clearExams()" style="background-color: #f44336;">Borrar Todos los Exámenes</button>
+    </div>
+
+    <div id="exam-frame-container">
+        <iframe id="exam-iframe"></iframe>
+    </div>
+    
+    <button id="back-to-menu-btn" onclick="showMenu()">Volver al Menú</button>
+
+    <div class="section" id="results-section">
+        <h2>Resultados Listos</h2>
+        <p>Presiona el botón para compartir los resultados.</p>
+        <button id="share-btn" onclick="shareJsonResult()">Compartir Resultados</button>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        loadExamUrls();
+        // Listener para recibir mensajes del iframe
+        window.addEventListener('message', (event) => {
+            if (event.data.type === 'json-result') {
+                jsonToShare = event.data.payload;
+                showResultsSection();
+            }
+        });
+    });
+
+    const EXAMS_KEY = 'exam_urls';
+    let jsonToShare = null; // Variable global para almacenar el JSON a compartir
+
+    function loadExamUrls() {
+        const examList = document.getElementById('exam-list');
+        examList.innerHTML = '';
+        const exams = JSON.parse(localStorage.getItem(EXAMS_KEY)) || [];
+
+        if (exams.length === 0) {
+            examList.innerHTML = '<li>No hay exámenes guardados.</li>';
+        } else {
+            exams.forEach((exam, index) => {
+                const listItem = document.createElement('li');
+                listItem.innerHTML = `
+                    <span>${exam.name}</span>
+                    <div>
+                        <button onclick="loadExam(${index})">Abrir</button>
+                        <button onclick="removeExam(${index})">Borrar</button>
+                    </div>
+                `;
+                examList.appendChild(listItem);
+            });
+        }
+    }
+
+    function addExamUrl() {
+        const urlInput = document.getElementById('exam-url-input');
+        const nameInput = document.getElementById('exam-name-input');
+        const url = urlInput.value;
+        const name = nameInput.value;
+
+        if (!url || !name) {
+            alert('Por favor, ingresa una URL y un nombre.');
+            return;
+        }
+
+        const exams = JSON.parse(localStorage.getItem(EXAMS_KEY)) || [];
+        exams.push({ name, url });
+        localStorage.setItem(EXAMS_KEY, JSON.stringify(exams));
+
+        urlInput.value = '';
+        nameInput.value = '';
+        loadExamUrls();
+    }
+
+    function removeExam(index) {
+        const exams = JSON.parse(localStorage.getItem(EXAMS_KEY)) || [];
+        exams.splice(index, 1);
+        localStorage.setItem(EXAMS_KEY, JSON.stringify(exams));
+        loadExamUrls();
+    }
+
+    function clearExams() {
+        if (confirm('¿Estás seguro de que quieres borrar todos los exámenes guardados?')) {
+            localStorage.removeItem(EXAMS_KEY);
+            loadExamUrls();
+            showMenu();
+        }
+    }
+
+    function loadExam(index) {
+        const exams = JSON.parse(localStorage.getItem(EXAMS_KEY)) || [];
+        const exam = exams[index];
+        const iframe = document.getElementById('exam-iframe');
+
+        iframe.src = exam.url;
+        document.getElementById('launcher-menu').style.display = 'none';
+        document.getElementById('exam-frame-container').style.display = 'block';
+        document.getElementById('back-to-menu-btn').style.display = 'block';
+        document.getElementById('results-section').style.display = 'none';
+    }
+    
+    function showMenu() {
+        document.getElementById('launcher-menu').style.display = 'block';
+        document.getElementById('exam-frame-container').style.display = 'none';
+        document.getElementById('exam-iframe').src = 'about:blank';
+        document.getElementById('back-to-menu-btn').style.display = 'none';
+        document.getElementById('results-section').style.display = 'none';
+        loadExamUrls();
+    }
+
+    function showResultsSection() {
+        document.getElementById('launcher-menu').style.display = 'none';
+        document.getElementById('exam-frame-container').style.display = 'none';
+        document.getElementById('back-to-menu-btn').style.display = 'block';
+        document.getElementById('results-section').style.display = 'block';
+    }
+    
+    async function shareJsonResult() {
+        if (!jsonToShare) {
+            alert('No hay resultados para compartir.');
+            return;
+        }
+        
+        const jsonStr = JSON.stringify(jsonToShare, null, 2);
+        
+        await Share.share({
+            title: 'Resultados de Evaluación',
+            text: jsonStr,
+            dialogTitle: 'Compartir resultados',
+        });
+    }
+</script>
+
+</body>
+</html>
