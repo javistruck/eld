@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EVALUACION PARA EL USO DE LA TRANSMISION</title>
+    <style>
+        body { font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; margin: 20px; background-color: #f4f7f9; }
+        .container { max-width: 600px; margin: auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); position: relative; }
+        h1, h2 { text-align: center; color: #004d99; }
+        p.instructions { text-align: center; color: #666; font-style: italic; margin-bottom: 20px; }
+        .header-info { display: flex; justify-content: space-between; align-items: center; font-size: 0.9em; margin-bottom: 20px; }
+        .header-info span { display: block; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input[type="text"], select { width: 98%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+        #submit-btn { background-color: #007bff; color: white; padding: 12px 15px; border: none; border-radius: 4px; cursor: pointer; width: 100%; margin-top: 20px; }
+        .button-group { display: flex; justify-content: space-around; margin-top: 20px; gap: 10px; }
+        .button-group button { padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; font-size: 1em; }
+        #download-btn { background-color: #2196F3; color: white; }
+        #clear-cache-btn { background-color: #f44336; color: white; }
+        
+        /* Estilos del modal del calendario */
+        .modal { display: none; position: fixed; z-index: 1; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.4); }
+        .modal-content { background-color: #fefefe; margin: 15% auto; padding: 20px; border: 1px solid #888; width: 80%; border-radius: 8px; }
+        .close-btn { color: #aaa; float: right; font-size: 28px; font-weight: bold; }
+        .close-btn:hover, .close-btn:focus { color: black; text-decoration: none; cursor: pointer; }
+        .evaluation-list li { padding: 10px; border-bottom: 1px solid #eee; cursor: pointer; }
+        .evaluation-list li:hover { background-color: #f9f9f9; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header-info">
+            <div>
+                <span id="date-info"></span>
+                <span id="time-info"></span>
+            </div>
+            <div>
+                <button id="calendar-icon" title="Ver evaluaciones guardadas">📅</button>
+            </div>
+        </div>
+
+        <h1>EVALUACION PARA EL USO DE LA TRANSMISION</h1>
+        <p class="instructions">En el siguiente examen evaluaremos las practicas correctas del uso de el Tracto Camión y sus Componentes</p>
+        
+        <form id="evaluation-form">
+            <div class="form-group">
+                <label for="id-matricula">ID y Número de Matrícula:</label>
+                <input type="text" id="id-matricula" required>
+            </div>
+            <div class="form-group">
+                <label for="student-name">Nombre del Alumno:</label>
+                <input type="text" id="student-name" required>
+            </div>
+
+            <h2>Competencias a Evaluar</h2>
+            
+                <div class="form-group">
+                    <label>1. 1.- Utiliza el freno de embrague para iniciar el movimiento de la unidad</label>
+                    <select name="question-0" required>
+                        <option value="">-- Selecciona una opción --</option>
+                        <option value="Excelente">Excelente</option>
+                        <option value="Muy Bien">Muy Bien</option>
+                        <option value="Bien">Bien</option>
+                        <option value="Regular">Regular</option>
+                        <option value="Mal">Mal</option>
+                        <option value="Pésimo">Pésimo</option>
+                    </select>
+                </div>
+            
+                <div class="form-group">
+                    <label>2. 2.- Trabaja el pedal del embrague en su fase de desenbrague </label>
+                    <select name="question-1" required>
+                        <option value="">-- Selecciona una opción --</option>
+                        <option value="Excelente">Excelente</option>
+                        <option value="Muy Bien">Muy Bien</option>
+                        <option value="Bien">Bien</option>
+                        <option value="Regular">Regular</option>
+                        <option value="Mal">Mal</option>
+                        <option value="Pésimo">Pésimo</option>
+                    </select>
+                </div>
+            
+                <div class="form-group">
+                    <label>3. 3.- Inicia movimiento del vehiculo en el cambio correcto	</label>
+                    <select name="question-2" required>
+                        <option value="">-- Selecciona una opción --</option>
+                        <option value="Excelente">Excelente</option>
+                        <option value="Muy Bien">Muy Bien</option>
+                        <option value="Bien">Bien</option>
+                        <option value="Regular">Regular</option>
+                        <option value="Mal">Mal</option>
+                        <option value="Pésimo">Pésimo</option>
+                    </select>
+                </div>
+            
+                <div class="form-group">
+                    <label>4. 4.- Conoce la secuencia de la caja de transmision del vehiculo</label>
+                    <select name="question-3" required>
+                        <option value="">-- Selecciona una opción --</option>
+                        <option value="Excelente">Excelente</option>
+                        <option value="Muy Bien">Muy Bien</option>
+                        <option value="Bien">Bien</option>
+                        <option value="Regular">Regular</option>
+                        <option value="Mal">Mal</option>
+                        <option value="Pésimo">Pésimo</option>
+                    </select>
+                </div>
+            
+                <div class="form-group">
+                    <label>5. 5.- Realiza cambios progresivos de acuerdo al peso del vehiculo</label>
+                    <select name="question-4" required>
+                        <option value="">-- Selecciona una opción --</option>
+                        <option value="Excelente">Excelente</option>
+                        <option value="Muy Bien">Muy Bien</option>
+                        <option value="Bien">Bien</option>
+                        <option value="Regular">Regular</option>
+                        <option value="Mal">Mal</option>
+                        <option value="Pésimo">Pésimo</option>
+                    </select>
+                </div>
+            
+                <div class="form-group">
+                    <label>6. 6.- Realiza el procedimiento de doble embrague </label>
+                    <select name="question-5" required>
+                        <option value="">-- Selecciona una opción --</option>
+                        <option value="Excelente">Excelente</option>
+                        <option value="Muy Bien">Muy Bien</option>
+                        <option value="Bien">Bien</option>
+                        <option value="Regular">Regular</option>
+                        <option value="Mal">Mal</option>
+                        <option value="Pésimo">Pésimo</option>
+                    </select>
+                </div>
+            
+                <div class="form-group">
+                    <label>7. 7.- Observa constantemente el tablero de instrumentos (RPM)</label>
+                    <select name="question-6" required>
+                        <option value="">-- Selecciona una opción --</option>
+                        <option value="Excelente">Excelente</option>
+                        <option value="Muy Bien">Muy Bien</option>
+                        <option value="Bien">Bien</option>
+                        <option value="Regular">Regular</option>
+                        <option value="Mal">Mal</option>
+                        <option value="Pésimo">Pésimo</option>
+                    </select>
+                </div>
+            
+                <div class="form-group">
+                    <label>8. 8.- Realiza cambios ascendentes dentro del rango (RPM)</label>
+                    <select name="question-7" required>
+                        <option value="">-- Selecciona una opción --</option>
+                        <option value="Excelente">Excelente</option>
+                        <option value="Muy Bien">Muy Bien</option>
+                        <option value="Bien">Bien</option>
+                        <option value="Regular">Regular</option>
+                        <option value="Mal">Mal</option>
+                        <option value="Pésimo">Pésimo</option>
+                    </select>
+                </div>
+            
+                <div class="form-group">
+                    <label>9. 9.- Realiza cambios descendentes dentro del rango (RPM)</label>
+                    <select name="question-8" required>
+                        <option value="">-- Selecciona una opción --</option>
+                        <option value="Excelente">Excelente</option>
+                        <option value="Muy Bien">Muy Bien</option>
+                        <option value="Bien">Bien</option>
+                        <option value="Regular">Regular</option>
+                        <option value="Mal">Mal</option>
+                        <option value="Pésimo">Pésimo</option>
+                    </select>
+                </div>
+            
+                <div class="form-group">
+                    <label>10. 10.-Toma el volante en posición mientras conduce</label>
+                    <select name="question-9" required>
+                        <option value="">-- Selecciona una opción --</option>
+                        <option value="Excelente">Excelente</option>
+                        <option value="Muy Bien">Muy Bien</option>
+                        <option value="Bien">Bien</option>
+                        <option value="Regular">Regular</option>
+                        <option value="Mal">Mal</option>
+                        <option value="Pésimo">Pésimo</option>
+                    </select>
+                </div>
+            
+                <div class="form-group">
+                    <label>11. 11.- Hace uso del pedal del freno correctamente sin sobresaltos</label>
+                    <select name="question-10" required>
+                        <option value="">-- Selecciona una opción --</option>
+                        <option value="Excelente">Excelente</option>
+                        <option value="Muy Bien">Muy Bien</option>
+                        <option value="Bien">Bien</option>
+                        <option value="Regular">Regular</option>
+                        <option value="Mal">Mal</option>
+                        <option value="Pésimo">Pésimo</option>
+                    </select>
+                </div>
+            
+                <div class="form-group">
+                    <label>12. 12.- Se conduce con buena ACTITUD durante la conduccion</label>
+                    <select name="question-11" required>
+                        <option value="">-- Selecciona una opción --</option>
+                        <option value="Excelente">Excelente</option>
+                        <option value="Muy Bien">Muy Bien</option>
+                        <option value="Bien">Bien</option>
+                        <option value="Regular">Regular</option>
+                        <option value="Mal">Mal</option>
+                        <option value="Pésimo">Pésimo</option>
+                    </select>
+                </div>
+            
+
+            <div class="form-group">
+                <label for="instructor-name">Nombre del Instructor:</label>
+                <input type="text" id="instructor-name" required>
+            </div>
+            <div class="form-group">
+                <label for="student-aptitude">Aptitud del Estudiante en el día:</label>
+                <select id="student-aptitude" required>
+                    <option value="">-- Selecciona una opción --</option>
+                    <option value="Excelente">Excelente</option>
+                    <option value="Muy Bien">Muy Bien</option>
+                    <option value="Bien">Bien</option>
+                    <option value="Regular">Regular</option>
+                    <option value="Mal">Mal</option>
+                    <option value="Pésimo">Pésimo</option>
+                </select>
+            </div>
+
+            <button type="submit" id="submit-btn">Guardar Evaluación</button>
+        </form>
+
+        <div class="button-group">
+            <button id="download-btn">Generar JSON</button>
+            <button id="clear-cache-btn">Borrar Evaluaciones Guardadas</button>
+        </div>
+    </div>
+
+    <div id="calendar-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>Evaluaciones Guardadas</h2>
+            <ul id="evaluation-list" class="evaluation-list">
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+    const dateInfo = document.getElementById('date-info');
+    const timeInfo = document.getElementById('time-info');
+    const form = document.getElementById('evaluation-form');
+    const downloadBtn = document.getElementById('download-btn');
+    const clearCacheBtn = document.getElementById('clear-cache-btn');
+    const calendarIcon = document.getElementById('calendar-icon');
+    const calendarModal = document.getElementById('calendar-modal');
+    const closeBtn = document.querySelector('.close-btn');
+    const evaluationList = document.getElementById('evaluation-list');
+
+    const updateTime = () => {
+        const now = new Date();
+        dateInfo.textContent = 'Fecha: ' + now.toLocaleDateString();
+        timeInfo.textContent = 'Hora: ' + now.toLocaleTimeString();
+    };
+    updateTime();
+    setInterval(updateTime, 1000);
+
+    let evaluationData = null;
+
+    const saveEvaluation = () => {
+        const formData = new FormData(form);
+        const now = new Date();
+        
+        const newEvaluation = {
+            examName: 'EVALUACION PARA EL USO DE LA TRANSMISION',
+            studentName: document.getElementById('student-name').value,
+            idMatricula: document.getElementById('id-matricula').value,
+            instructorName: document.getElementById('instructor-name').value,
+            studentAptitude: document.getElementById('student-aptitude').value,
+            date: now.toISOString(),
+            questions: {}
+        };
+
+        const questions = ['1.- Utiliza el freno de embrague para iniciar el movimiento de la unidad','2.- Trabaja el pedal del embrague en su fase de desenbrague ','3.- Inicia movimiento del vehiculo en el cambio correcto\t','4.- Conoce la secuencia de la caja de transmision del vehiculo','5.- Realiza cambios progresivos de acuerdo al peso del vehiculo','6.- Realiza el procedimiento de doble embrague ','7.- Observa constantemente el tablero de instrumentos (RPM)','8.- Realiza cambios ascendentes dentro del rango (RPM)','9.- Realiza cambios descendentes dentro del rango (RPM)','10.-Toma el volante en posición mientras conduce','11.- Hace uso del pedal del freno correctamente sin sobresaltos','12.- Se conduce con buena ACTITUD durante la conduccion'];
+
+        for (const [key, value] of formData.entries()) {
+            if (key.startsWith('question-')) {
+                const questionIndex = parseInt(key.replace('question-', ''), 10);
+                const questionText = questions[questionIndex];
+                newEvaluation.questions[questionText] = value;
+            }
+        }
+        
+        const existingEvaluations = JSON.parse(localStorage.getItem('evaluations')) || [];
+        existingEvaluations.push(newEvaluation);
+        localStorage.setItem('evaluations', JSON.stringify(existingEvaluations));
+        
+        evaluationData = newEvaluation;
+        
+        alert('Evaluación guardada con éxito! Ahora puedes generar el JSON.');
+    };
+
+    form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        saveEvaluation();
+    });
+
+    downloadBtn.addEventListener('click', () => {
+        if (!evaluationData) {
+            alert('Por favor, primero guarda la evaluación.');
+            return;
+        }
+        const jsonStr = JSON.stringify(evaluationData, null, 2);
+        const blob = new Blob([jsonStr], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        
+        const now = new Date();
+        const yyyy = now.getFullYear();
+        const mm = String(now.getMonth() + 1).padStart(2, '0');
+        const dd = String(now.getDate()).padStart(2, '0');
+        const hh = String(now.getHours()).padStart(2, '0');
+        const min = String(now.getMinutes()).padStart(2, '0');
+        const filename = (evaluationData.idMatricula || 'sin_matricula') + '_' + yyyy + '-' + mm + '-' + dd + '_' + hh + '-' + min + '.json';
+        
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    });
+
+    clearCacheBtn.addEventListener('click', () => {
+        if (confirm('¿Estás seguro de que quieres borrar todas las evaluaciones guardadas? Esta acción no se puede deshacer.')) {
+            localStorage.removeItem('evaluations');
+            alert('Se han borrado todas las evaluaciones guardadas.');
+            if (calendarModal.style.display === 'block') {
+                 evaluationList.innerHTML = '<li>No hay evaluaciones guardadas.</li>';
+            }
+        }
+    });
+
+    calendarIcon.addEventListener('click', () => {
+        evaluationList.innerHTML = '';
+        const evaluations = JSON.parse(localStorage.getItem('evaluations')) || [];
+
+        if (evaluations.length === 0) {
+            evaluationList.innerHTML = '<li>No hay evaluaciones guardadas.</li>';
+        } else {
+            const groupedByDate = evaluations.reduce((acc, current) => {
+                const dateKey = new Date(current.date).toLocaleDateString();
+                if (!acc[dateKey]) {
+                    acc[dateKey] = [];
+                }
+                acc[dateKey].push(current);
+                return acc;
+            }, {});
+
+            for (const date in groupedByDate) {
+                const dateHeader = document.createElement('h4');
+                dateHeader.textContent = 'Evaluaciones del ' + date;
+                evaluationList.appendChild(dateHeader);
+
+                groupedByDate[date].forEach(eval => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = 'Alumno: ' + eval.studentName + ' (Matrícula: ' + eval.idMatricula + ')';
+                    listItem.style.cursor = 'pointer';
+                    listItem.onclick = () => {
+                        const questionsHtml = Object.keys(eval.questions).map(key => key + ': ' + eval.questions[key]).join('\n');
+                        alert(
+                            "DETALLE DE LA EVALUACIÓN\n" +
+                            "-------------------------\n" +
+                            "Nombre del Examen: " + eval.examName + "\n" +
+                            "Fecha: " + new Date(eval.date).toLocaleString() + "\n" +
+                            "Alumno: " + eval.studentName + "\n" +
+                            "Matrícula: " + eval.idMatricula + "\n" +
+                            "Instructor: " + eval.instructorName + "\n" +
+                            "Aptitud del Día: " + eval.studentAptitude + "\n" +
+                            "\n--- Preguntas Evaluadas ---\n" +
+                            questionsHtml
+                        );
+                    };
+                    evaluationList.appendChild(listItem);
+                });
+            }
+        }
+        calendarModal.style.display = 'block';
+    });
+
+    closeBtn.addEventListener('click', () => {
+        calendarModal.style.display = 'none';
+    });
+
+    window.onclick = (event) => {
+        if (event.target == calendarModal) {
+            calendarModal.style.display = 'none';
+        }
+    };
+});
+    </script>
+
+</body>
+</html>
